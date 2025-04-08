@@ -31,6 +31,9 @@
 #include <linux/rbtree_latch.h>
 #include <linux/kallsyms.h>
 #include <linux/rcupdate.h>
+#ifdef CONFIG_RKP_MODULE_SUPPORT
+#include <linux/rkp.h>
+#endif
 
 #include <asm/unaligned.h>
 
@@ -582,6 +585,9 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
 {
 	u32 pages = hdr->pages;
 
+#ifdef CONFIG_RKP_MODULE_SUPPORT
+	uh_call(UH_APP_RKP, RKP_BFP_LOAD, (u64)hdr, (u64)(hdr->pages * PAGE_SIZE), RKP_BPF_JIT_FREE, 0);
+#endif
 	module_memfree(hdr);
 	bpf_jit_uncharge_modmem(pages);
 }
@@ -1646,6 +1652,7 @@ const struct bpf_func_proto bpf_get_prandom_u32_proto __weak;
 const struct bpf_func_proto bpf_get_smp_processor_id_proto __weak;
 const struct bpf_func_proto bpf_get_numa_node_id_proto __weak;
 const struct bpf_func_proto bpf_ktime_get_ns_proto __weak;
+const struct bpf_func_proto bpf_ktime_get_boot_ns_proto __weak;
 
 const struct bpf_func_proto bpf_get_current_pid_tgid_proto __weak;
 const struct bpf_func_proto bpf_get_current_uid_gid_proto __weak;
