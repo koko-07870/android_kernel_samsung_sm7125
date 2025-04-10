@@ -37,7 +37,7 @@ make -j$(nproc --all) O=out \
                       CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
                       LD=ld.lld
 
-zimage=out/arch/arm64/boot/Image.gz
+zimage=out/arch/arm64/boot/Image.gz-dtb
 if ! [ -a $zimage ];
 then
 echo  " Failed To Compile Kernel"
@@ -48,7 +48,7 @@ echo -e "\nKernel compiled successfully! Zipping up...\n"
 
 rm -rf AnyKernel3
 git clone --depth=1 https://github.com/koko-07870/AnyKernel3.git -b master AnyKernel3
-cp out/arch/arm64/boot/Image.gz AnyKernel3
+cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
 cd AnyKernel3
 zip -r9 "../$ZIPNAME" * -x .git
 cd ..
