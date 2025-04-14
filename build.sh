@@ -27,15 +27,10 @@ make O=out ARCH=arm64 oliver_defconfig
 PATH="${PWD}/../clang/bin:${PATH}" \
 make -j$(nproc --all) O=out \
                       ARCH=arm64 \
-                      CC="clang" \
-                      AR=llvm-ar \
-                      NM=llvm-nm \
-                      STRIP=llvm-strip \
-                      OBJCOPY=llvm-objcopy \
-                      OBJDUMP=llvm-objdump\
-                      CROSS_COMPILE=aarch64-linux-gnu-\
-                      CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
-                      LD=ld.lld
+                      LLVM=1 \
+                      CLANG_TRIPLE=aarch64-linux-gnu- \
+                      CROSS_COMPILE=aarch64-linux-gnu- \
+                      CROSS_COMPILE_COMPAT=arm-linux-gnueabi-
 
 zimage=out/arch/arm64/boot/Image.gz-dtb
 if ! [ -a $zimage ];
